@@ -26,7 +26,7 @@ public class Test1 {
 		savingAccount.deposit(100.0);
 		savingAccount.withdraw(50.0);
 		assertEquals(1, savingAccount.getId());
-		assertEquals(1050, savingAccount.balance, 0);
+		assertEquals(1050, savingAccount.getBalance(), 0);
 		assertEquals(1050, savingAccount.maximumAmountToWithdraw(), 0);
 	}
 	
@@ -36,8 +36,8 @@ public class Test1 {
 		checkingAccount.deposit(100.0);
 		checkingAccount.withdraw(1150.0);
 		assertEquals(2, checkingAccount.getId());
-		assertEquals(-50, checkingAccount.balance, 0);
-		assertEquals(100, checkingAccount.overdraft, 0);
+		assertEquals(-50, checkingAccount.getBalance(), 0);
+		assertEquals(100, checkingAccount.getOverdraft(), 0);
 		assertEquals(50, checkingAccount.maximumAmountToWithdraw(), 0);
 	}
 	

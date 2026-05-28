@@ -8,26 +8,31 @@ import com.luxoft.bankapp.utils.Params;
 public abstract class AbstractAccount implements Account, Serializable, Cloneable {
 
 	private static final long serialVersionUID = -2272551373694344386L;
-	
+
+	/** Discriminators used by {@link AccountFactory} and {@link #parse(Params)} — NOT stored on instances. */
 	public static final int SAVING_ACCOUNT_TYPE = 1;
 	public static final int CHECKING_ACCOUNT_TYPE = 2;
-	
-	private int id;
-	private int type;
 
-	public double balance;
-	
+	private int id;
+	private double balance;
+
 	public AbstractAccount(int id, double amount) {
 		this.id = id;
 		this.balance = amount;
 	}
-	
-	public int getType() {
-		return type;
+
+	@Override
+	public int getId() {
+		return id;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	@Override
+	public double getBalance() {
+		return balance;
+	}
+
+	protected void setBalance(double balance) {
+		this.balance = balance;
 	}
 
 	@Override
@@ -43,41 +48,23 @@ public abstract class AbstractAccount implements Account, Serializable, Cloneabl
 		if (amount < 0) {
 			throw new IllegalArgumentException("Cannot withdraw a negative amount");
 		}
-		
+
 		if (amount > maximumAmountToWithdraw()) {
 			throw new NotEnoughFundsException(id, balance, amount, "Requested amount exceeds the maximum amount to withdraw");
 		}
-		
+
 		this.balance -= amount;
 	}
-	
-	public double maximumAmountToWithdraw(){
-		switch (type) {
-		   case SAVING_ACCOUNT_TYPE:
-			   return balance;
-		   case CHECKING_ACCOUNT_TYPE:
-			   CheckingAccount checkingAccount = (CheckingAccount)this;
-			  return checkingAccount.balance + checkingAccount.overdraft;
-		}
-		
-        return 0;
-    }
+
+	/** Polymorphic — each concrete account type provides its own rule. */
+	@Override
+	public abstract double maximumAmountToWithdraw();
 
 	@Override
-	public int getId() {
-		return id;
+	public long decimalValue() {
+		return Math.round(balance);
 	}
 
-	@Override
-	public double getBalance() {
-		return balance;
-	}
-	
-	@Override
-    public long decimalValue(){
-        return Math.round(balance);
-    }
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -95,24 +82,19 @@ public abstract class AbstractAccount implements Account, Serializable, Cloneabl
 		if (getClass() != obj.getClass())
 			return false;
 		AbstractAccount other = (AbstractAccount) obj;
-		if (id != other.id)
-			return false;
-		return true;
+		return id == other.id;
 	}
-	
+
 	public static Account parse(Params params) {
-
-        switch (params.get("accountType")){
-            case "s": return SavingAccount.parse(params);
-            case "c": return CheckingAccount.parse(params);
-        }
-
-        return null;
-    }
+		switch (params.get("accountType")) {
+			case "s": return SavingAccount.parse(params);
+			case "c": return CheckingAccount.parse(params);
+		}
+		return null;
+	}
 
 	@Override
 	public AbstractAccount clone() throws CloneNotSupportedException {
 		return (AbstractAccount) super.clone();
 	}
-
 }

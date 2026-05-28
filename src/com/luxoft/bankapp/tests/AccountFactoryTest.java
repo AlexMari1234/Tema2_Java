@@ -26,7 +26,6 @@ public class AccountFactoryTest {
 		assertEquals(1, account.getId());
 		assertEquals(1000.0, account.getBalance(), 0);
 		assertEquals(1000.0, account.maximumAmountToWithdraw(), 0);
-		assertEquals(AbstractAccount.SAVING_ACCOUNT_TYPE, ((SavingAccount) account).getType());
 	}
 
 	@Test
@@ -47,7 +46,6 @@ public class AccountFactoryTest {
 		assertEquals(3, account.getId());
 		assertEquals(1000.0, account.getBalance(), 0);
 		assertEquals(1100.0, account.maximumAmountToWithdraw(), 0);
-		assertEquals(AbstractAccount.CHECKING_ACCOUNT_TYPE, ((CheckingAccount) account).getType());
 
 		// behaviour smoke test: withdrawing into overdraft works
 		account.withdraw(1050.0);
