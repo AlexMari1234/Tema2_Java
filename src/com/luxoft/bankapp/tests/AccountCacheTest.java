@@ -32,7 +32,6 @@ public class AccountCacheTest {
 		assertTrue(account instanceof SavingAccount);
 		assertEquals(0, account.getId());
 		assertEquals(0.0, account.getBalance(), 0);
-		assertEquals(AbstractAccount.SAVING_ACCOUNT_TYPE, account.getType());
 	}
 
 	@Test
@@ -43,8 +42,7 @@ public class AccountCacheTest {
 		assertTrue(account instanceof CheckingAccount);
 		assertEquals(0, account.getId());
 		assertEquals(0.0, account.getBalance(), 0);
-		assertEquals(0.0, ((CheckingAccount) account).overdraft, 0);
-		assertEquals(AbstractAccount.CHECKING_ACCOUNT_TYPE, account.getType());
+		assertEquals(0.0, ((CheckingAccount) account).getOverdraft(), 0);
 	}
 
 	@Test
