@@ -1,0 +1,14 @@
+# Compiled output
+out/
+bin/
+build/
+*.class
+
+# IntelliJ
+.idea/
+*.iml.bak
+
+# OS
+Thumbs.db
+.DS_Store
+
